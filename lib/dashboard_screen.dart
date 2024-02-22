@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_task/get_operation_screen.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -13,7 +14,9 @@ class DashboardScreen extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            ElevatedButton(onPressed: (){}, child: Text('Get Operation')),
+            ElevatedButton(onPressed: (){
+              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context)=>GetOperationScreen()));
+            }, child: Text('Get Operation')),
             SizedBox(height: 10,),
             ElevatedButton(onPressed: (){}, child: Text('Post Operation')),
             SizedBox(height: 10,),

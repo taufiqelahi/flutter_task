@@ -25,9 +25,8 @@ class ProjectFunc {
       required String endDate,
       required String projectName,
       required String projectUpdate,
-        required String assignedEngineer,
-        required String assignedTechnician
-      }) async {
+      required String assignedEngineer,
+      required String assignedTechnician}) async {
     final url = Uri.parse(
         'https://scubetech.xyz/projects/dashboard/add-project-elements/'); //Repclace Your Endpoint
     final headers = {'Content-Type': 'application/json'};
@@ -36,7 +35,7 @@ class ProjectFunc {
       "end_date": endDate,
       "project_name": projectName,
       "project_update": projectUpdate,
-      "assigned_engineer":assignedEngineer,
+      "assigned_engineer": assignedEngineer,
       "assigned_technician": assignedTechnician,
     });
 
@@ -46,6 +45,37 @@ class ProjectFunc {
       print('Data Sending Success.');
     } else {
       print('Hata: ${response.statusCode}');
+    }
+  }
+
+  Future<void> updateData(
+      {required String startDate,
+      required int id,
+      required String endDate,
+      required String projectName,
+      required String projectUpdate,
+      required String assignedEngineer,
+      required String assignedTechnician}) async {
+    final url = Uri.parse(
+        'https://scubetech.xyz/projects/dashboard/update-project-elements/$id/'); // Replace with your endpoint
+    final headers = {'Content-Type': 'application/json'};
+    final body = jsonEncode({
+      // Your data to be sent in the request body
+      "start_date": startDate,
+      "end_date": endDate,
+      "project_name": projectName,
+      "project_update": projectUpdate,
+      "assigned_engineer": assignedEngineer,
+      "assigned_technician": assignedTechnician,
+      // Add other fields as needed
+    });
+
+    final response = await http.put(url, headers: headers, body: body);
+
+    if (response.statusCode == 200) {
+      print('Data updated successfully.');
+    } else {
+      print('Failed to update data. Error: ${response.statusCode}');
     }
   }
 }

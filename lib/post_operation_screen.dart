@@ -2,10 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_task/backend/project_func.dart';
+import 'package:flutter_task/model/project_data_model.dart';
 import 'package:intl/intl.dart';
 
 class PostOperationScreen extends StatefulWidget {
-  const PostOperationScreen({super.key});
+  final ProjectModel? projectModel;
+  const PostOperationScreen({super.key, this.projectModel});
 
   @override
   State<PostOperationScreen> createState() => _PostOperationScreenState();
@@ -19,6 +21,7 @@ class _PostOperationScreenState extends State<PostOperationScreen> {
 
   String? selectedStartDate;
   String? selectedEndDate;
+  bool isEdit = false;
   void startDatePicker() async {
     final now = DateTime.now();
     final firstDate = DateTime(now.year - 1, now.month, now.day);
@@ -43,10 +46,29 @@ class _PostOperationScreenState extends State<PostOperationScreen> {
   }
 
   @override
+  void initState() {
+    final project = widget.projectModel;
+    if (project != null) {
+      setState(() {
+        isEdit = true;
+      });
+
+      selectedStartDate = DateFormat('yyyy-MM-dd').format(project.startDate);
+      selectedEndDate = DateFormat('yyyy-MM-dd').format(project.endDate);
+      projectNameController.text = project.projectName;
+      projectUpdateController.text = project.projectUpdate;
+      assignedEngineerController.text = project.assignedEngineer;
+      assignedTechnicianController.text = project.assignedTechnician;
+    }
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Project Elements'),
+        title: Text(isEdit ? 'Edit Project' : 'Add Project Elements'),
       ),
       body: Form(
         child: Padding(
@@ -101,17 +123,28 @@ class _PostOperationScreenState extends State<PostOperationScreen> {
               ),
               ElevatedButton(
                   onPressed: () async {
-                   await ProjectFunc().postData(
-                        startDate: selectedStartDate!,
-                        endDate: selectedEndDate!,
-                        projectName: projectNameController.text,
-                        projectUpdate: projectUpdateController.text,
-                        assignedEngineer: assignedEngineerController.text,
-                        assignedTechnician: assignedTechnicianController.text);
+                    isEdit
+                        ? await ProjectFunc().updateData(
+                            startDate: selectedStartDate!,
+                            endDate: selectedEndDate!,
+                            projectName: projectNameController.text,
+                            projectUpdate: projectUpdateController.text,
+                            assignedEngineer: assignedEngineerController.text,
+                            assignedTechnician:
+                                assignedTechnicianController.text,
+                            id: widget.projectModel!.id)
+                        : await ProjectFunc().postData(
+                            startDate: selectedStartDate!,
+                            endDate: selectedEndDate!,
+                            projectName: projectNameController.text,
+                            projectUpdate: projectUpdateController.text,
+                            assignedEngineer: assignedEngineerController.text,
+                            assignedTechnician:
+                                assignedTechnicianController.text);
 
-                   Navigator.pop(context);
+                    Navigator.pop(context, 'reload');
                   },
-                  child: const Text('Add Task'))
+                  child: Text(isEdit ? 'Edit Task' : 'Add Task'))
             ],
           ),
         ),

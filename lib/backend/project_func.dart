@@ -1,9 +1,8 @@
 import 'dart:convert';
 
-import 'package:flutter_task/controller/get_project_notifier.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_task/model/project_data_model.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProjectFunc {
   Future<List<ProjectModel>> getAllData() async {
@@ -11,17 +10,18 @@ class ProjectFunc {
         'https://scubetech.xyz/projects/dashboard/all-project-elements/'));
 
     if (response.statusCode == 200) {
-      // If the server returns an OK response, then parse the JSON.
-      // ref.watch(getProjectNotifierProvider.notifier).getAllData(projectModel: response.body);
+
       return projectFromJson(response.body);
+
     } else {
-      // If the response was umexpected, throw an error.
+
       throw Exception('Failed to load post');
     }
   }
 
   Future<void> postData(
       {required String startDate,
+        required BuildContext context,
       required String endDate,
       required String projectName,
       required String projectUpdate,
@@ -41,7 +41,14 @@ class ProjectFunc {
 
     final response = await http.post(url, headers: headers, body: body);
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Data Added successfully.'),
+          backgroundColor: Colors.blueGrey[800],
+          duration: Duration(seconds: 2),
+        ),
+      );
       print('Data Sending Success.');
     } else {
       print('Hata: ${response.statusCode}');
@@ -49,8 +56,10 @@ class ProjectFunc {
   }
 
   Future<void> updateData(
+
       {required String startDate,
       required int id,
+       required BuildContext context,
       required String endDate,
       required String projectName,
       required String projectUpdate,
@@ -73,9 +82,34 @@ class ProjectFunc {
     final response = await http.put(url, headers: headers, body: body);
 
     if (response.statusCode == 200) {
-      print('Data updated successfully.');
-    } else {
+       print('Data updated successfully.');
+       ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+           backgroundColor: Colors.blueGrey[800],
+           elevation: 6.0,
+           shape: RoundedRectangleBorder(
+             borderRadius: BorderRadius.circular(10.0),
+           ),
+
+
+           duration: Duration(seconds: 3),
+
+           content: Text('Data updated successfully.'),
+
+
+
+
+         ),
+       );
+  }else {
       print('Failed to update data. Error: ${response.statusCode}');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to update data. Error: ${response.statusCode}'),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+
     }
   }
 }

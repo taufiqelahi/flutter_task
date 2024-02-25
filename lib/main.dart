@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_task/dashboard_screen.dart';
 import 'package:flutter_task/get_operation_screen.dart';
-import 'package:flutter_task/post_operation_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,7 +32,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home:GetOperationScreen()
+      home:const GetOperationScreen()
     );
   }
 }

@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_task/backend/project_func.dart';
 import 'package:flutter_task/model/project_data_model.dart';
 import 'package:intl/intl.dart';
@@ -19,8 +17,8 @@ class _PostOperationScreenState extends State<PostOperationScreen> {
   TextEditingController assignedEngineerController = TextEditingController();
   TextEditingController assignedTechnicianController = TextEditingController();
 
-  String? selectedStartDate;
-  String? selectedEndDate;
+  String selectedStartDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+  String selectedEndDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
   bool isEdit = false;
   void startDatePicker() async {
     final now = DateTime.now();
@@ -29,19 +27,20 @@ class _PostOperationScreenState extends State<PostOperationScreen> {
         context: context,
         initialDate: now,
         firstDate: firstDate,
-        lastDate: now);
+        lastDate: DateTime(now.year + 1, now.month, now.day));
     setState(() {
-      selectedStartDate = DateFormat('yyyy-MM-dd').format(date!);
+      if (date != null)
+        selectedStartDate = DateFormat('yyyy-MM-dd').format(date);
     });
   }
 
   void endDatePicker() async {
     final now = DateTime.now();
-    final lastDate = DateTime(now.year + 1, now.month, now.day);
+    final lastDate = DateTime(now.year + 2, now.month, now.day);
     final date = await showDatePicker(
-        context: context, initialDate: now, firstDate: now, lastDate: lastDate);
+        context: context, initialDate: now, firstDate: DateTime.parse(selectedStartDate), lastDate: lastDate);
     setState(() {
-      selectedEndDate = DateFormat('yyyy-MM-dd').format(date!);
+      if (date != null) selectedEndDate = DateFormat('yyyy-MM-dd').format(date);
     });
   }
 
@@ -70,82 +69,83 @@ class _PostOperationScreenState extends State<PostOperationScreen> {
       appBar: AppBar(
         title: Text(isEdit ? 'Edit Project' : 'Add Project Elements'),
       ),
-      body: Form(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              const Row(
-                children: [Text("Start Date*"), Spacer(), Text("End Date*")],
-              ),
-              Row(
-                children: [
-                  Text(selectedStartDate == null
-                      ? 'No Date Chosen'
-                      : selectedStartDate!),
-                  const SizedBox(
-                    width: 6,
-                  ),
-                  IconButton(
-                      onPressed: startDatePicker,
-                      icon: const Icon(Icons.calendar_today)),
-                  const Spacer(),
-                  Text(selectedEndDate == null
-                      ? 'No Date Chosen'
-                      : selectedEndDate!),
-                  const SizedBox(
-                    width: 6,
-                  ),
-                  IconButton(
-                      onPressed: endDatePicker,
-                      icon: const Icon(Icons.calendar_today)),
-                ],
-              ),
-              TextField(
-                controller: projectNameController,
-                decoration:
-                    InputDecoration(label: Text('Enter Your Project Name')),
-              ),
-              TextField(
-                controller: projectUpdateController,
-                decoration: InputDecoration(label: Text('Project Update')),
-              ),
-              TextField(
-                controller: assignedEngineerController,
-                decoration: InputDecoration(label: Text('Assigned Engineer')),
-              ),
-              TextField(
-                controller: assignedTechnicianController,
-                decoration: InputDecoration(label: Text('Assigned Technician')),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              ElevatedButton(
-                  onPressed: () async {
-                    isEdit
-                        ? await ProjectFunc().updateData(
-                            startDate: selectedStartDate!,
-                            endDate: selectedEndDate!,
-                            projectName: projectNameController.text,
-                            projectUpdate: projectUpdateController.text,
-                            assignedEngineer: assignedEngineerController.text,
-                            assignedTechnician:
-                                assignedTechnicianController.text,
-                            id: widget.projectModel!.id)
-                        : await ProjectFunc().postData(
-                            startDate: selectedStartDate!,
-                            endDate: selectedEndDate!,
-                            projectName: projectNameController.text,
-                            projectUpdate: projectUpdateController.text,
-                            assignedEngineer: assignedEngineerController.text,
-                            assignedTechnician:
-                                assignedTechnicianController.text);
+      body: SingleChildScrollView(
+        child: Form(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                const Row(
+                  children: [Text("Start Date*"), Spacer(), Text("End Date*")],
+                ),
+                Row(
+                  children: [
+                    Text(selectedStartDate),
+                    const SizedBox(
+                      width: 6,
+                    ),
+                    IconButton(
+                        onPressed: startDatePicker,
+                        icon: const Icon(Icons.calendar_today)),
+                    const Spacer(),
+                    Text(selectedEndDate),
+                    const SizedBox(
+                      width: 6,
+                    ),
+                    IconButton(
+                        onPressed: endDatePicker,
+                        icon: const Icon(Icons.calendar_today)),
+                  ],
+                ),
+                TextField(
+                  controller: projectNameController,
+                  decoration:
+                      InputDecoration(label: Text('Enter Your Project Name')),
+                ),
+                TextField(
+                  controller: projectUpdateController,
+                  decoration: InputDecoration(label: Text('Project Update')),
+                ),
+                TextField(
+                  controller: assignedEngineerController,
+                  decoration: InputDecoration(label: Text('Assigned Engineer')),
+                ),
+                TextField(
+                  controller: assignedTechnicianController,
+                  decoration:
+                      InputDecoration(label: Text('Assigned Technician')),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                ElevatedButton(
+                    onPressed: () async {
+                      isEdit
+                          ? await ProjectFunc().updateData(
+                              context: context,
+                              startDate: selectedStartDate!,
+                              endDate: selectedEndDate!,
+                              projectName: projectNameController.text,
+                              projectUpdate: projectUpdateController.text,
+                              assignedEngineer: assignedEngineerController.text,
+                              assignedTechnician:
+                                  assignedTechnicianController.text,
+                              id: widget.projectModel!.id)
+                          : await ProjectFunc().postData(
+                              context: context,
+                              startDate: selectedStartDate!,
+                              endDate: selectedEndDate!,
+                              projectName: projectNameController.text,
+                              projectUpdate: projectUpdateController.text,
+                              assignedEngineer: assignedEngineerController.text,
+                              assignedTechnician:
+                                  assignedTechnicianController.text);
 
-                    Navigator.pop(context, 'reload');
-                  },
-                  child: Text(isEdit ? 'Edit Task' : 'Add Task'))
-            ],
+                      Navigator.pop(context, 'reload');
+                    },
+                    child: Text(isEdit ? 'Update Task' : 'Add Task'))
+              ],
+            ),
           ),
         ),
       ),

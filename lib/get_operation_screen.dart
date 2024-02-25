@@ -16,10 +16,9 @@ class GetOperationScreen extends StatefulWidget {
 class _GetOperationScreenState extends State<GetOperationScreen> {
   @override
   Widget build(BuildContext context) {
-    print('ff');
     return Scaffold(
       appBar: AppBar(
-        title: Text('Get All Task'),
+        title: const Text('Get All Task'),
       ),
       body: FutureBuilder(
         future: ProjectFunc().getAllData(),
@@ -28,7 +27,7 @@ class _GetOperationScreenState extends State<GetOperationScreen> {
           List<ProjectModel>? data = snapshot.data;
 
           if (data == null) {
-            return CircularProgressIndicator();
+            return const Center(child: CircularProgressIndicator());
           }
           return SingleChildScrollView(
             child: Column(
@@ -58,14 +57,39 @@ class _GetOperationScreenState extends State<GetOperationScreen> {
                                     Text(
                                       e.assignedTechnician,
                                       maxLines: 1,
+                                    ),
+                                    Text(
+                                      e.projectUpdate,
+                                      maxLines: 2,
+                                      style: TextStyle(fontSize: 12),
+
                                     )
                                   ],
                                 ),
                               ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                      "${DateFormat.yMd().format(e.startDate)} - ${DateFormat.yMd().format(e.endDate)}"),
+                                  Text(
+                                      "${e.startDayOfYear.toString()}-${e.endDayOfYear}"),
+                                  Text(e.duration.toString())
+                                ],
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
                               CupertinoButton(
-                                  child: Icon(Icons.edit_note),
+                                  child: Icon(
+                                    Icons.edit_note,
+                                    color: Colors.grey[700],
+                                  ),
                                   onPressed: () {
-                                    print(e.id);
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -80,20 +104,6 @@ class _GetOperationScreenState extends State<GetOperationScreen> {
                                       }
                                     });
                                   }),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                      "${DateFormat.yMd().format(e.startDate)} - ${DateFormat.yMd().format(e.endDate)}"),
-                                  Text(
-                                      "${e.startDayOfYear.toString()}-${e.endDayOfYear}"),
-                                  Text(e.duration.toString())
-                                ],
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
                             ],
                           ),
                         )))
@@ -104,9 +114,10 @@ class _GetOperationScreenState extends State<GetOperationScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => PostOperationScreen())).then((value) {
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const PostOperationScreen()))
+              .then((value) {
             if (value != null && value == 'reload') {
               setState(() {
                 // Reload the build method or update any necessary state variables here
@@ -114,7 +125,7 @@ class _GetOperationScreenState extends State<GetOperationScreen> {
             }
           });
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }

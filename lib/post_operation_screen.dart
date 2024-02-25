@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_task/backend/project_func.dart';
 import 'package:flutter_task/model/project_data_model.dart';
+import 'package:flutter_task/provider/fetch_data_controller.dart';
 import 'package:intl/intl.dart';
 
-class PostOperationScreen extends StatefulWidget {
+class PostOperationScreen extends ConsumerStatefulWidget {
   final ProjectModel? projectModel;
   const PostOperationScreen({super.key, this.projectModel});
 
   @override
-  State<PostOperationScreen> createState() => _PostOperationScreenState();
+  ConsumerState<PostOperationScreen> createState() => _PostOperationScreenState();
 }
 
-class _PostOperationScreenState extends State<PostOperationScreen> {
+class _PostOperationScreenState extends ConsumerState<PostOperationScreen> {
   TextEditingController projectNameController = TextEditingController();
   TextEditingController projectUpdateController = TextEditingController();
   TextEditingController assignedEngineerController = TextEditingController();
@@ -140,6 +142,7 @@ class _PostOperationScreenState extends State<PostOperationScreen> {
                               assignedEngineer: assignedEngineerController.text,
                               assignedTechnician:
                                   assignedTechnicianController.text);
+                      ref.watch(getDataProvider);
 
                       Navigator.pop(context, 'reload');
                     },

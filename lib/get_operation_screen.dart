@@ -1,21 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_task/backend/project_func.dart';
 import 'package:flutter_task/model/project_data_model.dart';
 import 'package:flutter_task/post_operation_screen.dart';
 import 'package:intl/intl.dart';
 
-class GetOperationScreen extends StatefulWidget {
+class GetOperationScreen extends ConsumerWidget {
   const GetOperationScreen({super.key});
 
   @override
-  State<GetOperationScreen> createState() => _GetOperationScreenState();
-}
-
-class _GetOperationScreenState extends State<GetOperationScreen> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context,WidgetRef ref) {
+    
     return Scaffold(
       appBar: AppBar(
         title: const Text('Get All Task'),
@@ -96,13 +93,8 @@ class _GetOperationScreenState extends State<GetOperationScreen> {
                                             builder: (context) =>
                                                 PostOperationScreen(
                                                   projectModel: e,
-                                                ))).then((value) {
-                                      if (value != null && value == 'reload') {
-                                        setState(() {
-                                          // Reload the build method or update any necessary state variables here
-                                        });
-                                      }
-                                    });
+                                                )));
+
                                   }),
                             ],
                           ),
@@ -116,14 +108,8 @@ class _GetOperationScreenState extends State<GetOperationScreen> {
           Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const PostOperationScreen()))
-              .then((value) {
-            if (value != null && value == 'reload') {
-              setState(() {
-                // Reload the build method or update any necessary state variables here
-              });
-            }
-          });
+                      builder: (context) => const PostOperationScreen()));
+
         },
         child: const Icon(Icons.add),
       ),

@@ -10,7 +10,8 @@ class PostOperationScreen extends ConsumerStatefulWidget {
   const PostOperationScreen({super.key, this.projectModel});
 
   @override
-  ConsumerState<PostOperationScreen> createState() => _PostOperationScreenState();
+  ConsumerState<PostOperationScreen> createState() =>
+      _PostOperationScreenState();
 }
 
 class _PostOperationScreenState extends ConsumerState<PostOperationScreen> {
@@ -40,7 +41,10 @@ class _PostOperationScreenState extends ConsumerState<PostOperationScreen> {
     final now = DateTime.now();
     final lastDate = DateTime(now.year + 2, now.month, now.day);
     final date = await showDatePicker(
-        context: context, initialDate: now, firstDate: DateTime.parse(selectedStartDate), lastDate: lastDate);
+        context: context,
+        initialDate: now,
+        firstDate: DateTime.parse(selectedStartDate),
+        lastDate: lastDate);
     setState(() {
       if (date != null) selectedEndDate = DateFormat('yyyy-MM-dd').format(date);
     });
@@ -67,7 +71,6 @@ class _PostOperationScreenState extends ConsumerState<PostOperationScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text(isEdit ? 'Edit Project' : 'Add Project Elements'),
@@ -133,7 +136,8 @@ class _PostOperationScreenState extends ConsumerState<PostOperationScreen> {
                               assignedEngineer: assignedEngineerController.text,
                               assignedTechnician:
                                   assignedTechnicianController.text,
-                              id: widget.projectModel!.id)
+                              id: widget.projectModel!.id,
+                            )
                           : await ProjectFunc().postData(
                               context: context,
                               startDate: selectedStartDate!,
@@ -143,7 +147,6 @@ class _PostOperationScreenState extends ConsumerState<PostOperationScreen> {
                               assignedEngineer: assignedEngineerController.text,
                               assignedTechnician:
                                   assignedTechnicianController.text);
-
 
                       Navigator.pop(context, 'reload');
                     },

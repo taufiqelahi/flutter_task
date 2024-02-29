@@ -1,16 +1,19 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_task/model/project_data_model.dart';
+import 'package:flutter_task/provider/fetch_data_controller.dart';
 import 'package:http/http.dart' as http;
 
 class ProjectFunc {
-  Future<List<ProjectModel>> getAllData() async {
+  Future<List<ProjectModel>> getAllData({required WidgetRef ref}) async {
     final response = await http.get(Uri.parse(
         'https://scubetech.xyz/projects/dashboard/all-project-elements/'));
 
     if (response.statusCode == 200) {
-
+      List<ProjectModel> projects=projectFromJson(response.body);
+       ref.watch(getDataProvider.notifier).updateData(projects:projects );
       return projectFromJson(response.body);
 
     } else {
@@ -58,6 +61,7 @@ class ProjectFunc {
   Future<void> updateData(
 
       {required String startDate,
+        //required WidgetRef ref,
       required int id,
        required BuildContext context,
       required String endDate,
@@ -82,6 +86,7 @@ class ProjectFunc {
     final response = await http.put(url, headers: headers, body: body);
 
     if (response.statusCode == 200) {
+     
        print('Data updated successfully.');
        ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -101,6 +106,9 @@ class ProjectFunc {
 
          ),
        );
+
+     //  ref.watch(getDataProvider.notifier).updateSingleData(projecModel: )
+       
   }else {
       print('Failed to update data. Error: ${response.statusCode}');
       ScaffoldMessenger.of(context).showSnackBar(

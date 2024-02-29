@@ -6,5 +6,20 @@ part 'fetch_data_controller.g.dart';
 @riverpod
 class GetData extends _$GetData {
   @override
-  Future<List<ProjectModel>> build() async => await ProjectFunc().getAllData();
+ List<ProjectModel> build() => [];
+
+
+
+  updateData({required List<ProjectModel> projects}){
+    state=[...state, ...projects];
+  }
+  updateSingleData({required ProjectModel  projecModel}){
+
+   int index= state.indexWhere((element) => element.id==projecModel.id);
+
+   if(index>-1){
+     state[index]=projecModel;
+     // state=[...state];
+   }
+  }
 }

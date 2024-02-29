@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_task/backend/project_func.dart';
 import 'package:flutter_task/model/project_data_model.dart';
-import 'package:flutter_task/provider/fetch_data_controller.dart';
 import 'package:intl/intl.dart';
 
 class PostOperationScreen extends ConsumerStatefulWidget {

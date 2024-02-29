@@ -1,24 +1,27 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_task/backend/project_func.dart';
 import 'package:flutter_task/model/project_data_model.dart';
-import 'package:flutter_task/post_operation_screen.dart';
-import 'package:flutter_task/provider/fetch_data_controller.dart';
+import 'package:flutter_task/screen/post_operation_screen.dart';
 import 'package:intl/intl.dart';
 
-class GetOperationScreen extends ConsumerWidget {
+class GetOperationScreen extends StatefulWidget {
   const GetOperationScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  State<GetOperationScreen> createState() => _GetOperationScreenState();
+}
+
+class _GetOperationScreenState extends State<GetOperationScreen> {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Get All Task'),
       ),
       body: FutureBuilder(
-        future: ref.watch(getDataProvider.future),
+        future: ProjectFunc().getAllData(),
         builder:
             (BuildContext context, AsyncSnapshot<List<ProjectModel>> snapshot) {
           List<ProjectModel>? data = snapshot.data;
@@ -58,12 +61,12 @@ class GetOperationScreen extends ConsumerWidget {
                                     Text(
                                       e.projectUpdate,
                                       maxLines: 2,
-                                      style: TextStyle(fontSize: 12),
+                                      style: const TextStyle(fontSize: 12),
                                     )
                                   ],
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 10,
                               ),
                               Column(
@@ -92,7 +95,13 @@ class GetOperationScreen extends ConsumerWidget {
                                             builder: (context) =>
                                                 PostOperationScreen(
                                                   projectModel: e,
-                                                )));
+                                                ))).then((value) {
+                                      if (value != null && value == 'reload') {
+                                        setState(() {
+                                          // Reload the build method or update any necessary state variables here
+                                        });
+                                      }
+                                    });;
                                   }),
                             ],
                           ),
@@ -106,7 +115,13 @@ class GetOperationScreen extends ConsumerWidget {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => const PostOperationScreen()));
+                  builder: (context) => const PostOperationScreen())).then((value) {
+            if (value != null && value == 'reload') {
+              setState(() {
+                // Reload the build method or update any necessary state variables here
+              });
+            }
+          });
         },
         child: const Icon(Icons.add),
       ),

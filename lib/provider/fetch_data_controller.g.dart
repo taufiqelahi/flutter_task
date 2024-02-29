@@ -6,7 +6,7 @@ part of 'fetch_data_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getDataHash() => r'51f92baa05e2e1de9bc77e9525102f3f53c40a89';
+String _$getDataHash() => r'bee2e1902ba7d8328591a07e3379d1edab94dadd';
 
 /// See also [GetData].
 @ProviderFor(GetData)

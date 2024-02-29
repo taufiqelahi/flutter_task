@@ -67,6 +67,7 @@ class _PostOperationScreenState extends ConsumerState<PostOperationScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Text(isEdit ? 'Edit Project' : 'Add Project Elements'),
@@ -142,7 +143,7 @@ class _PostOperationScreenState extends ConsumerState<PostOperationScreen> {
                               assignedEngineer: assignedEngineerController.text,
                               assignedTechnician:
                                   assignedTechnicianController.text);
-                      ref.watch(getDataProvider);
+
 
                       Navigator.pop(context, 'reload');
                     },

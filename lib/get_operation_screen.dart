@@ -5,20 +5,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_task/backend/project_func.dart';
 import 'package:flutter_task/model/project_data_model.dart';
 import 'package:flutter_task/post_operation_screen.dart';
+import 'package:flutter_task/provider/fetch_data_controller.dart';
 import 'package:intl/intl.dart';
 
 class GetOperationScreen extends ConsumerWidget {
   const GetOperationScreen({super.key});
 
   @override
-  Widget build(BuildContext context,WidgetRef ref) {
-    
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Get All Task'),
       ),
       body: FutureBuilder(
-        future: ProjectFunc().getAllData(),
+        future: ref.watch(getDataProvider.future),
         builder:
             (BuildContext context, AsyncSnapshot<List<ProjectModel>> snapshot) {
           List<ProjectModel>? data = snapshot.data;
@@ -59,7 +59,6 @@ class GetOperationScreen extends ConsumerWidget {
                                       e.projectUpdate,
                                       maxLines: 2,
                                       style: TextStyle(fontSize: 12),
-
                                     )
                                   ],
                                 ),
@@ -94,7 +93,6 @@ class GetOperationScreen extends ConsumerWidget {
                                                 PostOperationScreen(
                                                   projectModel: e,
                                                 )));
-
                                   }),
                             ],
                           ),
@@ -106,10 +104,9 @@ class GetOperationScreen extends ConsumerWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const PostOperationScreen()));
-
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const PostOperationScreen()));
         },
         child: const Icon(Icons.add),
       ),

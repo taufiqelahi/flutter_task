@@ -6,5 +6,5 @@ part 'fetch_data_controller.g.dart';
 @riverpod
 class GetData extends _$GetData {
   @override
-  build()=>ProjectFunc().getAllData();
+  Future<List<ProjectModel>> build() async => await ProjectFunc().getAllData();
 }

@@ -101,7 +101,8 @@ class _GetOperationScreenState extends State<GetOperationScreen> {
                                           // Reload the build method or update any necessary state variables here
                                         });
                                       }
-                                    });;
+                                    });
+                                    ;
                                   }),
                             ],
                           ),
@@ -113,9 +114,10 @@ class _GetOperationScreenState extends State<GetOperationScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const PostOperationScreen())).then((value) {
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const PostOperationScreen()))
+              .then((value) {
             if (value != null && value == 'reload') {
               setState(() {
                 // Reload the build method or update any necessary state variables here
